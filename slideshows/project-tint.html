@@ -332,10 +332,32 @@
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      .slide { padding: 40px 28px 90px; }
-      h1 { font-size: 32px; }
-      h2 { font-size: 26px; margin-bottom: 24px; }
-      .financials-box { padding: 20px 22px; }
+      .slide { padding: 32px 22px 80px; }
+      h1 { font-size: 28px; line-height: 1.1; }
+      h2 { font-size: 22px; margin-bottom: 18px; }
+      .label { font-size: 11px; }
+      .financials-box { padding: 16px 16px; }
+      .bullet-list li { font-size: 13px; padding: 12px 0; gap: 10px; }
+      .point-list li { font-size: 13px; padding: 12px 0; }
+      .toc-list li { font-size: 14px; }
+      .pnl-table { font-size: 11px; overflow-x: auto; display: block; }
+      .pnl-header { font-size: 9px; padding: 6px 8px; }
+      .pnl-row { padding: 5px 8px; font-size: 11px; }
+      .key-takeaway { font-size: 12px; padding: 14px 16px; }
+      #logo { height: 26px; bottom: 18px; left: 18px; }
+      #nav { bottom: 16px; right: 18px; gap: 8px; }
+      .nav-btn { width: 34px; height: 34px; font-size: 15px; }
+      #counter { font-size: 11px; }
+      p { font-size: 14px; }
+    }
+    @media (max-width: 480px) {
+      .slide { padding: 24px 16px 72px; }
+      h1 { font-size: 22px; }
+      h2 { font-size: 19px; margin-bottom: 14px; }
+      .pnl-header { grid-template-columns: 1fr 90px 54px; }
+      .pnl-row { grid-template-columns: 1fr 90px 54px; }
+      .fin-row { font-size: 12px; }
+      .fin-key-row .fin-val { font-size: 16px; }
     }
   </style>
 </head>
