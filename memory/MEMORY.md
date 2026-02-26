@@ -73,6 +73,8 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - **Logo:** `/Users/george/.openclaw/workspace/slideshows/zkw-logo.png` — embed as base64 in HTML
 - **GHL embed:** `<iframe src="URL" width="100%" height="620px" frameborder="0" style="border:none;"></iframe>`
 - **Canva API:** Dead end — Canva dev portal requires MFA, MFA not available on Dylan's free plan account
+- **Tone rule:** Deck is TOP-OF-FUNNEL ONLY. Job = get call booked. No downsides, no red flags, no weakness framing. Downsides are saved for the call. Never mention: "no CRM," "organic referrals," "founder dependency," "no SOPs," "no formal systems" — even framed as upside. Focus on what the business HAS, not what it lacks. If a fact could plant doubt, leave it out.
+- **Accuracy rule:** Cross-reference every claim against the actual CIM before including it. Do not include market-demand traits (recurring %, owner removed, AI, SOPs, clean books, low concentration) unless confirmed in the CIM.
 
 ## What Makes Agency Deals Sell (Market Demand Doc)
 - **Recurring revenue** (retainer-based) → 5x–7x EBITDA vs 3x–4.5x for project-based
