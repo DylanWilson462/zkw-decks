@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Tint — Business For Sale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #fff;
+      color: #111;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    /* ── Deck container ── */
+    #deck {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* ── Slides ── */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 80px 100px;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Typography ── */
+    .label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: 0.5px;
+      color: #111;
+      max-width: 900px;
+    }
+    h2 {
+      font-family: 'Anton', sans-serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      letter-spacing: 0.5px;
+      color: #111;
+      margin-bottom: 36px;
+    }
+    .sub {
+      font-size: 16px;
+      font-weight: 500;
+      color: #555;
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+    p {
+      font-size: clamp(14px, 1.6vw, 18px);
+      line-height: 1.75;
+      color: #222;
+      max-width: 820px;
+      margin-bottom: 20px;
+    }
+
+    /* ── TOC ── */
+    .toc-list {
+      list-style: none;
+      counter-reset: toc;
+    }
+    .toc-list li {
+      counter-increment: toc;
+      font-size: clamp(15px, 1.8vw, 20px);
+      font-weight: 600;
+      line-height: 1.4;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      max-width: 600px;
+    }
+    .toc-list li::before {
+      content: counter(toc) ". ";
+      color: #aaa;
+      font-weight: 700;
+    }
+
+    /* ── Bullet points (checkmarks) ── */
+    .bullet-list {
+      list-style: none;
+      width: 100%;
+      max-width: 860px;
+    }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: clamp(14px, 1.5vw, 17px);
+      line-height: 1.6;
+      color: #222;
+    }
+    .bullet-list li:last-child { border-bottom: none; }
+    .check {
+      font-size: 22px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .bullet-list li strong {
+      font-weight: 700;
+      color: #111;
+    }
+
+    /* ── Points (regular bullets) ── */
+    .point-list {
+      list-style: none;
+      width: 100%;
+      max-width: 860px;
+    }
+    .point-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: clamp(14px, 1.5vw, 17px);
+      line-height: 1.6;
+      color: #222;
+    }
+    .point-list li:last-child { border-bottom: none; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #111;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    /* ── Financials / Returns ── */
+    .financials-box {
+      background: #f8f8f8;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 32px 40px;
+      max-width: 780px;
+      width: 100%;
+    }
+    .fin-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 10px 0;
+      border-bottom: 1px solid #e8e8e8;
+      font-size: 15px;
+    }
+    .fin-row:last-child { border-bottom: none; }
+    .fin-row .fin-label { font-weight: 500; color: #444; }
+    .fin-row .fin-val { font-weight: 700; color: #111; font-size: 16px; }
+    .fin-divider {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 12px 0;
+    }
+    .fin-key-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 0 0;
+    }
+    .fin-key-row .fin-label { font-weight: 700; font-size: 16px; color: #111; }
+    .fin-key-row .fin-val { font-weight: 700; font-size: 20px; color: #111; }
+    .key-takeaway {
+      background: #111;
+      color: #fff;
+      padding: 18px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.6;
+      margin-top: 20px;
+      max-width: 780px;
+    }
+    .key-takeaway span { font-weight: 400; color: #ccc; font-size: 12px; display: block; margin-bottom: 4px; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* ── CTA ── */
+    .cta-btn {
+      display: inline-block;
+      margin-top: 32px;
+      padding: 18px 40px;
+      background: #111;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .cta-btn:hover { background: #333; }
+    .cta-sub-list {
+      list-style: none;
+      margin-top: 24px;
+    }
+    .cta-sub-list li {
+      font-size: 15px;
+      color: #444;
+      padding: 6px 0;
+    }
+    .cta-sub-list li::before { content: "→ "; font-weight: 700; color: #111; }
+
+    /* ── Logo ── */
+    #logo {
+      position: fixed;
+      bottom: 28px;
+      left: 40px;
+      z-index: 100;
+      height: 36px;
+      opacity: 0.85;
+    }
+
+    /* ── Navigation ── */
+    #nav {
+      position: fixed;
+      bottom: 24px;
+      right: 40px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-btn {
+      width: 40px;
+      height: 40px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .nav-btn:hover { background: #444; }
+    .nav-btn:disabled { background: #ccc; cursor: default; }
+    #counter {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 1px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: #111;
+      transition: width 0.35s ease;
+      z-index: 200;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .slide { padding: 40px 28px 90px; }
+      h1 { font-size: 32px; }
+      h2 { font-size: 26px; margin-bottom: 24px; }
+      .financials-box { padding: 20px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="deck"></div>
+
+<!-- LOGO: Replace src with your actual logo URL -->
+<img id="logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='36'%3E%3Crect width='120' height='36' rx='2' fill='%23111'/%3E%3Ctext x='10' y='24' font-family='Arial' font-size='13' font-weight='bold' fill='%23fff'%3EYOUR LOGO%3C/text%3E%3C/svg%3E" alt="Logo" />
+
+<div id="nav">
+  <button class="nav-btn" id="prev" onclick="changeSlide(-1)">&#8592;</button>
+  <span id="counter">1 / 16</span>
+  <button class="nav-btn" id="next" onclick="changeSlide(1)">&#8594;</button>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+//  SLIDE DATA — Edit this object for each deck
+// ─────────────────────────────────────────────
+const DECK = {
+  ctaLink: "#",  // Replace with your booking/calendar link
+  ctaLabel: "Schedule a Qualification Call",
+  ctaBusinessCode: "Project Tint",
+  slides: [
+    // 1 — Hero
+    {
+      type: "hero",
+      preheading: "New Off-Market Business For Sale",
+      heading: "NICHE DIGITAL MARKETING AGENCY WITH 56 CLIENTS ON SUBSCRIPTION & OWNER REMOVED",
+      sub: "Click through the slides for details"
+    },
+
+    // 2 — TOC
+    {
+      type: "toc",
+      heading: "WHAT WE WILL COVER",
+      items: [
+        "Deal Highlights",
+        "Company Overview",
+        "Financials",
+        "Projected Returns",
+        "Why We Are Selling",
+        "Summary",
+        "Next Steps"
+      ]
+    },
+
+    // 3 — Deal Highlights (1 of 3)
+    {
+      type: "bullets",
+      heading: "DEAL HIGHLIGHTS",
+      items: [
+        {
+          strong: "Low Owner Dependency",
+          text: " — Operator handles strategic oversight only. Sales, fulfillment, and client management are fully delegated to a 7-person team with documented SOPs across all three departments."
+        },
+        {
+          strong: "Low Client Concentration",
+          text: " — No single client exceeds ~10–12% of revenue. Top 5 clients represent only ~30–35% of total revenue — eliminating the concentration risk that kills most agency deals."
+        }
+      ]
+    },
+
+    // 4 — Deal Highlights (2 of 3)
+    {
+      type: "bullets",
+      heading: "DEAL HIGHLIGHTS",
+      items: [
+        {
+          strong: "50.5% EBITDA Margins",
+          text: " — More than double the 20–25% industry benchmark, driven by a lean, all-contractor model with zero payroll tax or benefits obligations."
+        },
+        {
+          strong: "Complete SOP Documentation",
+          text: " — Every core process across Sales, Client Success, and Fulfillment is documented in ClickUp with scripts, workflows, and training materials."
+        }
+      ]
+    },
+
+    // 5 — Deal Highlights (3 of 3)
+    {
+      type: "bullets",
+      heading: "DEAL HIGHLIGHTS",
+      items: [
+        {
+          strong: "AI-Integrated Operations",
+          text: " — AI-assisted automations (Make.com, Manus AI, ManyChat) are embedded into delivery and client communication workflows, reducing manual labor and improving margins."
+        },
+        {
+          strong: "Growing Recurring Revenue Base",
+          text: " — Clients on monthly retainers ($897–$6,000/month) with 3-, 6-, and 12-month auto-renewing contracts. Actively converting pay-per-lead clients to retainers, building a predictable revenue foundation."
+        }
+      ]
+    },
+
+    // 6 — Company Overview (1 of 5)
+    {
+      type: "points",
+      heading: "COMPANY OVERVIEW",
+      items: [
+        "Retainer-based done-for-you Meta ads agency exclusively serving the automotive aftermarket industry — founded mid-2024.",
+        "Scaled to $455K in annual revenue with a 50.5% Adjusted EBITDA margin — more than double the 20–25% industry benchmark for agencies at this stage."
+      ]
+    },
+
+    // 7 — Company Overview (2 of 5)
+    {
+      type: "points",
+      heading: "COMPANY OVERVIEW (cont'd)",
+      items: [
+        "The operator is not involved in sales, fulfillment, or day-to-day client communication — the business runs on a fully delegated team with comprehensive SOPs across every department.",
+        "Delivers an end-to-end lead generation system: Meta ad campaigns, high-converting landing pages, GoHighLevel CRM with AI-assisted automation, automated follow-up sequences, and ongoing campaign optimization."
+      ]
+    },
+
+    // 8 — Company Overview (3 of 5)
+    {
+      type: "points",
+      heading: "COMPANY OVERVIEW (cont'd)",
+      items: [
+        "Acquires its own clients through Meta ads using the same systems it delivers to clients — creating a proven growth flywheel.",
+        "Sales operation is fully delegated to a trained setter/closer team running documented scripts, daily standups, and structured training — all housed in ClickUp with complete SOPs."
+      ]
+    },
+
+    // 9 — Company Overview (4 of 5)
+    {
+      type: "points",
+      heading: "COMPANY OVERVIEW (cont'd)",
+      items: [
+        "Fulfillment is led by a dedicated media buyer and 2 Client Success Managers using documented, repeatable delivery workflows — every process from onboarding to conflict resolution to upsell conversion is captured in step-by-step SOPs.",
+        "AI-integrated tech stack built around GoHighLevel, Make.com, Manus AI, and ManyChat — enabling efficient, scalable delivery at a total software cost of just ~$2,050/month."
+      ]
+    },
+
+    // 10 — Company Overview (5 of 5)
+    {
+      type: "points",
+      heading: "COMPANY OVERVIEW (cont'd)",
+      items: [
+        "56 active clients with no single client exceeding ~10–12% of revenue — a highly diversified base that eliminates the concentration risk that kills most agency deals.",
+        "High-cash-flow, operationally leveraged agency positioned for scalable growth post-acquisition."
+      ]
+    },
+
+    // 11 — Financials (teaser)
+    {
+      type: "simple",
+      heading: "FINANCIALS",
+      content: "(Detailed P&L Available For Qualified Applicants)"
+    },
+
+    // 12 — Projected Returns
+    {
+      type: "returns",
+      heading: "PROJ. RETURNS (SBA INC.)",
+      purchasePrice: "$400,000",
+      downPayment: "$40,000 (10%)",
+      loanAmount: "$360,000 (SBA 7a @ ~10%)",
+      monthlyProfit: "$27,139 per month",
+      scenarios: [
+        { label: "5-Year SBA Term — Loan Payment", val: "~$7,650 / month" },
+        { label: "Net Monthly Income (5yr)", val: "~$19,490" },
+        { label: "10-Year SBA Term — Loan Payment", val: "~$4,760 / month" },
+        { label: "Net Monthly Income (10yr)", val: "~$22,380" }
+      ],
+      takeaway: "Buyer earns $19k–$22k per month immediately after debt service — with only $40,000 down."
+    },
+
+    // 13 — Why We're Selling
+    {
+      type: "simple",
+      heading: "WHY WE'RE SELLING",
+      content: "The operator built this agency from zero to $455K in 18 months but has competing business priorities that prevent him from giving it the focused attention it deserves. Rather than let a proven, profitable business plateau, he'd rather hand it to someone who'll make it their primary focus and capitalize on the significant growth runway that's already been built — while he benefits from the financial gain of an acquisition."
+    },
+
+    // 14 — Summary (1 of 2)
+    {
+      type: "bullets",
+      heading: "SUMMARY",
+      items: [
+        {
+          strong: "Niche-dominant Meta ads agency",
+          text: " exclusively serving a fragmented, underserved vertical with strong demand."
+        },
+        {
+          strong: "$455K revenue, 50.5% EBITDA margins, 56 active clients",
+          text: " — scaled in just 18 months with H2 annualizing at ~$651K."
+        },
+        {
+          strong: "Low owner dependency",
+          text: " — sales, fulfillment, and client management are fully delegated with comprehensive SOPs documented across every department."
+        }
+      ]
+    },
+
+    // 15 — Summary (2 of 2)
+    {
+      type: "bullets",
+      heading: "SUMMARY (cont'd)",
+      items: [
+        {
+          strong: "Low client concentration",
+          text: " — no client exceeds ~10–12% of revenue. Top 5 represent only ~30–35%."
+        },
+        {
+          strong: "AI-integrated, systematized operations",
+          text: " — built to run without the founder and scale under new ownership."
+        },
+        {
+          strong: "Priced at just 1.74x EBITDA",
+          text: " for a fast, clean transaction with sub-2-year payback assuming zero growth."
+        }
+      ]
+    },
+
+    // 16 — Next Steps
+    {
+      type: "cta",
+      heading: "NEXT STEPS",
+      intro: "Click below to schedule a quick meeting to qualify as a buyer for our business codenamed:",
+      ctaItems: [
+        "Your financial qualification",
+        "Deep overview of the business",
+        "Next steps and complete Due Diligence Package"
+      ]
+    }
+  ]
+};
+
+
+// ─────────────────────────────────────────────
+//  RENDERER
+// ─────────────────────────────────────────────
+
+let current = 0;
+
+function buildSlides() {
+  const deck = document.getElementById('deck');
+  DECK.slides.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'slide' + (i === 0 ? ' active' : '');
+    div.dataset.index = i;
+    div.innerHTML = renderSlide(s);
+    deck.appendChild(div);
+  });
+  updateUI();
+}
+
+function renderSlide(s) {
+  switch (s.type) {
+    case 'hero':
+      return `
+        <div class="label">${esc(s.preheading)}</div>
+        <h1>${esc(s.heading)}</h1>
+        <div class="sub">${esc(s.sub)}</div>`;
+
+    case 'toc':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <ol class="toc-list">${s.items.map(i => `<li>${esc(i)}</li>`).join('')}</ol>`;
+
+    case 'bullets':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <ul class="bullet-list">${s.items.map(i => `
+          <li><span class="check">✅</span><span><strong>${esc(i.strong)}</strong>${esc(i.text)}</span></li>`).join('')}
+        </ul>`;
+
+    case 'points':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <ul class="point-list">${s.items.map(i => `
+          <li><span class="dot"></span><span>${esc(i)}</span></li>`).join('')}
+        </ul>`;
+
+    case 'simple':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <p>${esc(s.content)}</p>`;
+
+    case 'returns':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <div class="financials-box">
+          <div class="fin-row"><span class="fin-label">Purchase Price</span><span class="fin-val">${esc(s.purchasePrice)}</span></div>
+          <div class="fin-row"><span class="fin-label">Down Payment</span><span class="fin-val">${esc(s.downPayment)}</span></div>
+          <div class="fin-row"><span class="fin-label">Loan Amount</span><span class="fin-val">${esc(s.loanAmount)}</span></div>
+          <div class="fin-row"><span class="fin-label">Business Profit (2025 Avg)</span><span class="fin-val">${esc(s.monthlyProfit)}</span></div>
+          <hr class="fin-divider"/>
+          <div class="label" style="margin:8px 0 12px;color:#aaa;font-size:11px">MONTHLY OUTCOME AFTER DEBT</div>
+          ${s.scenarios.map(r => `<div class="fin-row"><span class="fin-label">${esc(r.label)}</span><span class="fin-val">${esc(r.val)}</span></div>`).join('')}
+        </div>
+        <div class="key-takeaway"><span>Key Takeaway</span>${esc(s.takeaway)}</div>`;
+
+    case 'cta':
+      return `
+        <h2>${esc(s.heading)}</h2>
+        <p>${esc(s.intro)} <strong>${esc(DECK.ctaBusinessCode)}</strong></p>
+        <p style="font-size:14px;color:#555;margin-bottom:4px">On this call we will go over:</p>
+        <ul class="cta-sub-list">${s.ctaItems.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+        <a class="cta-btn" href="${DECK.ctaLink}" target="_blank">${esc(DECK.ctaLabel)}</a>`;
+
+    default:
+      return '';
+  }
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function changeSlide(dir) {
+  const slides = document.querySelectorAll('.slide');
+  const next = current + dir;
+  if (next < 0 || next >= slides.length) return;
+  slides[current].classList.remove('active');
+  current = next;
+  slides[current].classList.add('active');
+  updateUI();
+}
+
+function updateUI() {
+  const total = DECK.slides.length;
+  document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('prev').disabled = current === 0;
+  document.getElementById('next').disabled = current === total - 1;
+  document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+// Touch swipe
+let touchX = null;
+document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) changeSlide(dx < 0 ? 1 : -1);
+  touchX = null;
+});
+
+buildSlides();
+</script>
+</body>
+</html>
