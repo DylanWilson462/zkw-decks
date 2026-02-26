@@ -676,7 +676,7 @@ function renderSlide(s) {
         <p>${esc(s.intro)} <strong>${esc(DECK.ctaBusinessCode)}</strong></p>
         <p style="font-size:14px;color:#555;margin-bottom:4px">On this call we will go over:</p>
         <ul class="cta-sub-list">${s.ctaItems.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
-        <a class="cta-btn" href="${DECK.ctaLink}" target="_blank">${esc(DECK.ctaLabel)}</a>`;
+        <p style="margin-top:28px;font-size:15px;font-weight:600;color:#111;">👇 Book your call below to get started.</p>`;
 
     default:
       return '';
