@@ -103,10 +103,20 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - Wait for approval or revision requests
 
 ### Step 5: On Approval — Deliver to Drive
-1. Create Google Doc with all ad copy (primary text, 3 headlines, description)
+1. Create Google Doc with all ad copy (primary text, 3 headlines, description) **plus slide deck link and responsive embed code** (see embed format below)
 2. Upload all 8 image ads + Google Doc to a new Google Drive folder named "[Deal Name] Ads"
 3. Share folder with dylan@zastrekentwilson.com
-4. Send Dylan the Drive folder link
+4. Send Dylan the Drive folder link + slide deck link
+
+**Responsive embed code to include in every Google Doc:**
+```html
+<div style="position:relative;width:100%;padding-bottom:56.25%;height:0;overflow:hidden;">
+  <iframe src="[DECK_URL]"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+    allowfullscreen>
+  </iframe>
+</div>
+```
 
 ---
 
