@@ -76,6 +76,9 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - **Layout rule:** `pnl` and `returns` slides must always use `justify-content: flex-start` (top-aligned) via a `.slide-compact` class — never centered. Centered layout clips content above and below when rows overflow. All other slides center normally.
 - **Tone rule:** Deck is TOP-OF-FUNNEL ONLY. Job = get call booked. No downsides, no red flags, no weakness framing. Downsides are saved for the call. Never mention: "no CRM," "organic referrals," "founder dependency," "no SOPs," "no formal systems" — even framed as upside. Focus on what the business HAS, not what it lacks. If a fact could plant doubt, leave it out.
 - **Accuracy rule:** Cross-reference every claim against the actual CIM before including it. Do not include market-demand traits (recurring %, owner removed, AI, SOPs, clean books, low concentration) unless confirmed in the CIM.
+- **GitHub Pages repo:** https://github.com/DylanWilson462/zkw-decks — push new decks to `/Users/george/.openclaw/workspace/slideshows/` and `git push origin main`. Each deck at `https://dylanwilson462.github.io/zkw-decks/<filename>.html`
+- **nano-banana-pro:** Gemini API key in `openclaw.json` → `models.providers.google.apiKey`. Script: `/opt/homebrew/lib/node_modules/openclaw/skills/nano-banana-pro/scripts/generate_image.py`. Save creatives to `meta-ads/creatives/` with timestamp filenames.
+- **Ad formats for ZKW deal listings:** (1) P&L table + gradient-to-black bold headline (green/blue highlight, "HOT TOPIC" label), (2) Yellow badge + P&L + red arrow on key number, (3) iPhone Notes app screenshot style, (4) X dark mode post screenshot (Dylan Wilson @dylanwilson). Generate all 4 formats per deal using Maple numbers as template.
 
 ## What Makes Agency Deals Sell (Market Demand Doc)
 - **Recurring revenue** (retainer-based) → 5x–7x EBITDA vs 3x–4.5x for project-based

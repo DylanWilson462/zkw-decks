@@ -1,0 +1,5 @@
+# Meta Ads Credentials
+- App: George's Ads Manager (1322928006426265)
+- Account: act_1181076679162240
+- Token: EAASzMjPYz5kBQZBpu2mXf9TmIVkoezt3regRZAoZBSdkSCShi0aj0U2iEXk6UqqmLlADZBRHB23t5Wb8DYuGvJ3tXZCbrlhyI9u3K6fgJvXGeXYQ0THgD4aSYPXvuh8qAyewNC1h6DZAP6uGFUseEeSvagiWcsM5K3HfDL6F7FMy8tzZBxTxlSUBvHS8V1gvmieJWQ6nZBzWsykxoCKQjGebUrIttbOPE6EmWC9letiWFUoCgbwymYbSiaZAvbu0ZCleQizluhALHUTnGZAZB4TCMMqTeNE3
+- Permissions: ads_read, read_insights. Short-lived (~60 days). Regenerate at developers.facebook.com/tools/explorer
