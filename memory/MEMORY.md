@@ -128,6 +128,44 @@ Run with: `cd /tmp/maple_ads && npm init -y && npm install playwright && npx pla
 
 **Reference files** (working examples): `/Users/george/.openclaw/workspace/maple_ads/ad1_final.png` through `ad5_final.png`
 
+## Note Ads (iPhone Notes Style) — Standard Format
+
+**Trigger:** Any CIM + "make ads" / "we're selling X, make ads" OR asks for "note ads." Always make BOTH variations.
+
+**Output:** 2 square (750×750px) white-background iPhone Notes app style images.
+
+**2 Ad Variations:**
+1. **Stat-first** — lowercase title leading with the biggest financial hook (e.g. "CA$640K/yr profit, retainer-based digital marketing agency for sale")
+2. **Feature-first** — Title Case title describing business characteristics (e.g. "Digital Marketing Agency With 74% Profit Margins & Zero Paid Marketing For Sale")
+
+**Both variations share identical:**
+- iOS Notes chrome bar (back `‹` button left, 3 icon buttons right)
+- Date: `February 9, 2026 at 10:08 AM` — small grey centered
+- Bullet list with en dashes `–`, key words **bolded**
+- CTA: `Tap below for full P&L and deal structure`
+- Background: `#ffffff`
+- Font: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif`
+
+**Copy rules:**
+- Title: 40px, weight 800, `#111111`, line-height 1.13
+- Bullets: 19px, weight 400, `#1a1a1a`, en dash `–`, key phrases bold
+- CTA: 19px, weight 400
+- No asking price unless deal explicitly requires it
+
+**Technical pipeline (identical to X Post Ads):**
+1. Write HTML to `/tmp/maple_ads/note1.html` and `note2.html`
+2. Screenshot `.note` element via playwright node script → `rawnote1.png`, `rawnote2.png`
+3. Composite centered onto 750×750 `#ffffff` canvas: `magick -size 750x750 "xc:#ffffff" raw.png -gravity Center -composite output.png`
+4. Copy to `/Users/george/.openclaw/workspace/maple_ads/` and send via `message` tool
+
+**Reference files:** `/Users/george/.openclaw/workspace/maple_ads/note1_final.png` and `note2_final.png`
+
+---
+
+**Full ad set per deal = 7 images total:**
+- 5 × X Post Ads (dark theme, Dylan's headshot)
+- 2 × Note Ads (white, iPhone Notes style)
+
 ## What Makes Agency Deals Sell (Market Demand Doc)
 - **Recurring revenue** (retainer-based) → 5x–7x EBITDA vs 3x–4.5x for project-based
 - **Owner removed** → systematized sells at 7x–8x vs founder-dependent at 3x–4x
