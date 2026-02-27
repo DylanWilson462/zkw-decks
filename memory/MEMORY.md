@@ -57,7 +57,7 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 ## Sales Deck Slideshow System
 - **Purpose:** HTML slideshows embedded via iframe in GHL landing pages — replace VSLs for deal listings
 - **Cadence:** ~1 new deck per 2 weeks
-- **Workflow:** Dylan provides CIM → I generate HTML deck → hosted (Netlify drop) → iframed in GHL
+- **Workflow:** Dylan provides CIM → I generate HTML deck → push to GitHub Pages → link goes in GHL iframe and Google Doc
 - **Template file:** `/Users/george/.openclaw/workspace/slideshows/project-tint.html` (use as base)
 - **Structure (always 14–16 slides):**
   1. Hero/Title
@@ -76,9 +76,16 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - **Layout rule:** `pnl` and `returns` slides must always use `justify-content: flex-start` (top-aligned) via a `.slide-compact` class — never centered. Centered layout clips content above and below when rows overflow. All other slides center normally.
 - **Tone rule:** Deck is TOP-OF-FUNNEL ONLY. Job = get call booked. No downsides, no red flags, no weakness framing. Downsides are saved for the call. Never mention: "no CRM," "organic referrals," "founder dependency," "no SOPs," "no formal systems" — even framed as upside. Focus on what the business HAS, not what it lacks. If a fact could plant doubt, leave it out.
 - **Accuracy rule:** Cross-reference every claim against the actual CIM before including it. Do not include market-demand traits (recurring %, owner removed, AI, SOPs, clean books, low concentration) unless confirmed in the CIM.
-- **GitHub Pages repo:** https://github.com/DylanWilson462/zkw-decks — push new decks to `/Users/george/.openclaw/workspace/slideshows/` and `git push origin main`. Each deck at `https://dylanwilson462.github.io/zkw-decks/<filename>.html`
+- **GitHub Pages repo:** https://github.com/DylanWilson462/zkw-decks — push new decks to `/Users/george/.openclaw/workspace/slideshows/` and `git push origin main`. Each deck at `https://dylanwilson462.github.io/zkw-decks/slideshows/<filename>.html` ⚠️ MUST include `/slideshows/` in URL — without it returns 404
 - **nano-banana-pro:** Gemini API key in `openclaw.json` → `models.providers.google.apiKey`. Script: `/opt/homebrew/lib/node_modules/openclaw/skills/nano-banana-pro/scripts/generate_image.py`. Save creatives to `meta-ads/creatives/` with timestamp filenames.
 - **Ad formats for ZKW deal listings:** See dedicated sections below — X Post Ads (5), Note Ads (2), P&L Ad (1) = 8 total per deal.
+
+## Completed Deal Marketing Packages
+
+| Deal | Deck URL | Drive Folder | Status |
+|------|----------|--------------|--------|
+| Project Maple | https://dylanwilson462.github.io/zkw-decks/slideshows/project-maple.html | — | Ads only (no full package) |
+| Project Beacon | https://dylanwilson462.github.io/zkw-decks/slideshows/project-beacon.html | https://drive.google.com/drive/folders/1iE63N3YweM5LqxT5Bkh4Cd1Xkhx7szck | ✅ Full package delivered |
 
 ## "Create Marketing Assets" — Master Workflow Trigger
 
@@ -160,30 +167,15 @@ Individual ad types can also be triggered by name: "X ads", "Twitter ads", "note
 - **Global rule:** Always use Apple emoji across all ad formats (X Post, Note, P&L) — they render natively on macOS WebKit, no custom SVG or icon fonts needed
 
 **Technical pipeline:**
-1. Write 5 HTML files using template in `/Users/george/.openclaw/workspace/maple_ads/` (or recreate from scratch)
-2. Key CSS: tweet `width: 750px`, background `#15202b`, font-family `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif` — **always set font-family explicitly on html/body or it breaks**
-3. Embed headshot as base64 inline (not file:// URL — it won't load in playwright)
-4. Screenshot tweet element only using local playwright node script (`cd /tmp/maple_ads && node screenshot.js`) — produces raw PNGs of just the tweet at natural height
-5. Composite each raw PNG centered onto 750×750 `#15202b` canvas with: `magick -size 750x750 "xc:#15202b" raw.png -gravity Center -composite output.png`
-6. Copy finals to `/Users/george/.openclaw/workspace/maple_ads/` and send via `message` tool with `filePath`
+1. Create working dir `/tmp/[deal]_ads/`, symlink playwright: `ln -sf /tmp/maple_ads/node_modules /tmp/[deal]_ads/node_modules`
+2. Write HTML files to `/tmp/[deal]_ads/ad1-5.html` and `note1-2.html`
+3. Key CSS: tweet `width: 750px`, background `#15202b`, font-family `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif` — **always set font-family explicitly on html/body or it breaks**
+4. Embed headshot as base64 inline — `base64 -i [file] | tr -d '\n' > headshot_b64.txt` (NOT file:// URL — breaks in playwright)
+5. Screenshot `.tweet` element via playwright webkit node script → raw PNGs
+6. Composite each raw PNG centered onto 750×750 `#15202b` canvas: `magick -size 750x750 xc:#15202b raw.png -gravity Center -composite final.png`
+7. Save finals to `/Users/george/.openclaw/workspace/[deal]_ads/` and send via `message` tool with `filePath`
 
-**Playwright script** (`/tmp/maple_ads/screenshot.js`):
-```js
-const { webkit } = require('playwright');
-(async () => {
-  const browser = await webkit.launch();
-  const context = await browser.newContext({ viewport: { width: 750, height: 2000 } });
-  const page = await context.newPage();
-  for (let i = 1; i <= 5; i++) {
-    await page.goto(`file:///tmp/maple_ads/ad${i}.html`, { waitUntil: 'load' });
-    await page.waitForTimeout(300);
-    const tweet = await page.$('.tweet');
-    await tweet.screenshot({ path: `/tmp/maple_ads/raw${i}.png` });
-  }
-  await browser.close();
-})();
-```
-Run with: `cd /tmp/maple_ads && npm init -y && npm install playwright && npx playwright install webkit && node screenshot.js`
+**Playwright node_modules location:** `/tmp/maple_ads/node_modules` — symlink to new deal dir to reuse.
 
 **Reference files** (working examples): `/Users/george/.openclaw/workspace/maple_ads/ad1_final.png` through `ad5_final.png`
 
@@ -212,10 +204,10 @@ Run with: `cd /tmp/maple_ads && npm init -y && npm install playwright && npx pla
 - No asking price unless deal explicitly requires it
 
 **Technical pipeline (identical to X Post Ads):**
-1. Write HTML to `/tmp/maple_ads/note1.html` and `note2.html`
-2. Screenshot `.note` element via playwright node script → `rawnote1.png`, `rawnote2.png`
-3. Composite centered onto 750×750 `#ffffff` canvas: `magick -size 750x750 "xc:#ffffff" raw.png -gravity Center -composite output.png`
-4. Copy to `/Users/george/.openclaw/workspace/maple_ads/` and send via `message` tool
+1. Write HTML to `/tmp/[deal]_ads/note1.html` and `note2.html`
+2. Screenshot `.note` element via playwright node script → raw PNGs
+3. Composite centered onto 750×750 `#ffffff` canvas: `magick -size 750x750 xc:#ffffff raw.png -gravity Center -composite final.png`
+4. Copy to `/Users/george/.openclaw/workspace/[deal]_ads/` and send via `message` tool
 
 **Reference files:** `/Users/george/.openclaw/workspace/maple_ads/note1_final.png` and `note2_final.png`
 
@@ -328,10 +320,7 @@ draw.polygon(polygon, fill=(232,25,44))
 img.save("output.png")
 ```
 **Venv:** `python3 -m venv /tmp/arrowenv && /tmp/arrowenv/bin/pip install pillow -q`
-**Run:** `/tmp/arrowenv/bin/python3 script.py`
-
-**Venv:** `python3 -m venv /tmp/arrowenv && /tmp/arrowenv/bin/pip install pillow -q`
-
+**Run:** `/tmp/arrowenv/bin/python3 arrow.py`
 **Reference file:** `/Users/george/.openclaw/workspace/maple_ads/pnl_arrow_final.png`
 
 ---
@@ -340,6 +329,21 @@ img.save("output.png")
 - 5 × X Post Ads (dark theme, Dylan's headshot)
 - 2 × Note Ads (white, iPhone Notes style)
 - 1 × P&L Ad (Instagram Story 9:16, yellow banner + table + diagonal red arrow)
+
+## Google Drive & Docs API
+
+**⚠️ gog CLI hangs indefinitely — do NOT use for Drive/Docs operations. Use Python + Drive API directly.**
+
+- **Credentials:** Client ID + Secret in `~/Library/Application Support/gogcli/credentials.json`
+- **Tokens:** `~/Library/Application Support/gogcli/tokens.json` → key: `dylan@zastrekentwilson.com`
+- **Refresh token flow:** POST to `https://oauth2.googleapis.com/token` with `grant_type=refresh_token`
+- **Upload file to Drive:** multipart POST to `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`
+- **Create Google Doc from text:** same multipart upload with `mimeType: application/vnd.google-apps.document` in metadata + `text/plain` body — Drive auto-converts
+- **Append to Doc:** GET doc to find end index → `POST /v1/documents/{id}:batchUpdate` with `insertText` request
+- **Create folder:** POST to Drive files API with `mimeType: application/vnd.google-apps.folder`
+- **Share:** POST to `https://www.googleapis.com/drive/v3/files/{id}/permissions` with `{type:user, role:reader, emailAddress:...}`
+- **Reference script:** `/tmp/beacon_drive.py` (full working example with all operations)
+- **Share target:** always `dylan@zastrekentwilson.com`
 
 ## What Makes Agency Deals Sell (Market Demand Doc)
 - **Recurring revenue** (retainer-based) → 5x–7x EBITDA vs 3x–4.5x for project-based
