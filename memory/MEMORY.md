@@ -162,9 +162,97 @@ Run with: `cd /tmp/maple_ads && npm init -y && npm install playwright && npx pla
 
 ---
 
-**Full ad set per deal = 7 images total:**
+**Full ad set per deal = 8 images total:**
 - 5 × X Post Ads (dark theme, Dylan's headshot)
 - 2 × Note Ads (white, iPhone Notes style)
+- 1 × P&L Ad (see P&L Ads section)
+
+## P&L Ads — Standard Format
+
+**Trigger:** Any CIM + "make ads" / "we're selling X, make ads" OR asks for "P&L ads." Make 1 per deal.
+
+**Output:** Single Instagram Story portrait image (9:16 ratio, 1080×1920px equivalent).
+
+**Layout (top to bottom):**
+1. **Yellow banner** — `#FFE500`, rounded rect, bold Arial Black text with the top highlight (e.g. "16+ Year Retainer-Based Agency With 74% Profit Margins")
+2. **P&L header** — centered bold text: "Profit & Loss Statement / For the Year Ended 31 December [YEAR]"
+3. **P&L table** — dark navy `#1E3A5F` header row (white text: "P&L (CAD/USD)" left, year right), thin grey borders, left-aligned labels, right-aligned numbers. Bold rows: Gross Profit, EBITDA (Before Add-Backs), Adjusted EBITDA, Seller's Disc. Earnings (SDE)
+4. **Red diagonal arrow** — `#E8192C`, diagonal from lower-left area pointing up-right to the SDE value. Shaft = 2× head length. Fully inside the image. Does NOT cover the SDE label text on the left.
+
+**Standard P&L rows:**
+- Revenues | [amount]
+- Gross Profit (bold) | [amount]
+- Operating Expenses | ([amount])
+- EBITDA (Before Add-Backs) (bold) | [amount]
+- Personal Expense Add-Backs | [amount]
+- Adjusted EBITDA (bold) | [amount]
+- Operator Draws | [amount or 0]
+- Seller's Disc. Earnings (SDE) (bold) | [amount]
+
+**No asking price in the table.**
+
+**Technical pipeline:**
+1. Generate base image with nano-banana-pro (2K resolution) using the prompt template below — no arrow in prompt
+2. Use Python + Pillow to draw the arrow programmatically with exact coordinates
+
+**Nano-banana base prompt template:**
+```
+"Create a clean Instagram Story ad (9:16 portrait, white background).
+TOP: Bright yellow (#FFE500) rounded rectangle banner, bold black Arial Black text: '[HIGHLIGHT]'
+MIDDLE: Centered bold black text 'Profit & Loss Statement' and 'For the Year Ended 31 December [YEAR]'
+Then a clean financial table: dark navy blue (#1E3A5F) header row, white text 'P&L (CAD)' left-aligned, '[YEAR]' right-aligned, thin grey borders, left-aligned labels, right-aligned numbers. Bold rows: Gross Profit, EBITDA (Before Add-Backs), Adjusted EBITDA, Seller's Disc. Earnings (SDE).
+Rows: [list all rows]. No red arrow — clean table only."
+```
+
+**Python arrow script** (run after nano-banana generates base image):
+```python
+import math
+from PIL import Image, ImageDraw
+
+img = Image.open("base.png")
+w, h = img.size  # typically ~1536x2752 at 2K
+draw = ImageDraw.Draw(img)
+
+# Erase bottom area to remove any AI-generated arrow artifacts
+draw.rectangle([0, int(h*0.52), w, h], fill=(255,255,255))
+
+# Arrow tip: right column of SDE row — tune tip_x/tip_y by checking row positions
+tip_x = int(w * 0.937)   # ~right column
+tip_y = int(h * 0.534)   # ~SDE row center (last row)
+
+angle_rad = math.radians(38)  # ~38° diagonal
+dx, dy = math.cos(angle_rad), -math.sin(angle_rad)
+px, py = math.sin(angle_rad), math.cos(angle_rad)
+
+head_len, shaft_len = int(w*0.195), int(w*0.391)  # shaft = 2x head
+body_half, head_half = int(w*0.047), int(w*0.090)
+
+hx, hy = tip_x - head_len*dx, tip_y - head_len*dy
+tx, ty = tip_x - (head_len+shaft_len)*dx, tip_y - (head_len+shaft_len)*dy
+
+def pt(cx, cy, pax, pay, off): return (cx+off*pax, cy+off*pay)
+
+polygon = [
+    pt(tx,ty,px,py,body_half), pt(hx,hy,px,py,body_half),
+    pt(hx,hy,px,py,head_half), (tip_x,tip_y),
+    pt(hx,hy,px,py,-head_half), pt(hx,hy,px,py,-body_half),
+    pt(tx,ty,px,py,-body_half),
+]
+draw.polygon(polygon, fill=(232,25,44))
+img.save("output.png")
+```
+**Note:** `tip_y` needs tuning per image — check where SDE row falls. SDE is the last (8th) body row. Erase rectangle threshold (~52% of height) may also need adjusting per generated image.
+
+**Venv:** `python3 -m venv /tmp/arrowenv && /tmp/arrowenv/bin/pip install pillow -q`
+
+**Reference file:** `/Users/george/.openclaw/workspace/maple_ads/pnl_arrow_final.png`
+
+---
+
+**Full ad set per deal = 8 images total:**
+- 5 × X Post Ads (dark theme, Dylan's headshot)
+- 2 × Note Ads (white, iPhone Notes style)
+- 1 × P&L Ad (Instagram Story 9:16, yellow banner + table + diagonal red arrow)
 
 ## What Makes Agency Deals Sell (Market Demand Doc)
 - **Recurring revenue** (retainer-based) → 5x–7x EBITDA vs 3x–4.5x for project-based
