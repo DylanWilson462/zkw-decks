@@ -86,7 +86,7 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 
 **Output:** 5 square (750×750px) dark-mode X/Twitter post images. Always make all 5 variations.
 
-**Profile:** Dylan Wilson · @dylanwilson · blue verified badge · headshot at `/Users/george/.openclaw/media/inbound/file_34---58dda8ea-6ebd-409d-af9d-87fdb1242dc5.jpg`
+**Profile:** Dylan Wilson · @dylanwilson · blue verified badge · headshot at `/Users/george/.openclaw/media/inbound/file_36---dd5a2d2f-713f-4ebc-9255-65e25398d221.png`
 
 **3 Ad Formats (rotate across 5 ads):**
 1. **Plain text + blue highlight** — hook stat, short line facts, one key metric in `#1d9bf0` blue, closer, CTA
