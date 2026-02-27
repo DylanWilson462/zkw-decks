@@ -78,7 +78,23 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - **Accuracy rule:** Cross-reference every claim against the actual CIM before including it. Do not include market-demand traits (recurring %, owner removed, AI, SOPs, clean books, low concentration) unless confirmed in the CIM.
 - **GitHub Pages repo:** https://github.com/DylanWilson462/zkw-decks — push new decks to `/Users/george/.openclaw/workspace/slideshows/` and `git push origin main`. Each deck at `https://dylanwilson462.github.io/zkw-decks/<filename>.html`
 - **nano-banana-pro:** Gemini API key in `openclaw.json` → `models.providers.google.apiKey`. Script: `/opt/homebrew/lib/node_modules/openclaw/skills/nano-banana-pro/scripts/generate_image.py`. Save creatives to `meta-ads/creatives/` with timestamp filenames.
-- **Ad formats for ZKW deal listings:** (1) P&L table + gradient-to-black bold headline (green/blue highlight, "HOT TOPIC" label), (2) Yellow badge + P&L + red arrow on key number, (3) iPhone Notes app screenshot style, (4) X dark mode post screenshot (Dylan Wilson @dylanwilson). Generate all 4 formats per deal using Maple numbers as template.
+- **Ad formats for ZKW deal listings:** See dedicated sections below — X Post Ads (5), Note Ads (2), P&L Ad (1) = 8 total per deal.
+
+## Deal Ad Set — Master Trigger
+
+**When Dylan sends a CIM + says "make ads" (or "we're selling X, make ads"), produce ALL 8 images:**
+1. 5 × X Post Ads (dark theme Twitter style)
+2. 2 × Note Ads (iPhone Notes style)
+3. 1 × P&L Ad (Instagram Story 9:16)
+
+Individual ad types can also be triggered by name: "X ads", "Twitter ads", "note ads", "P&L ad."
+
+**Copy rules applying to ALL ad types:**
+- NO asking price or valuation multiple in any ad
+- Extract key stats from CIM: revenue, profit/EBITDA, margin %, years in business, team size, unique differentiators
+- Highlight text = the single most compelling hook from the CIM
+
+---
 
 ## X Post Ads (Twitter Ads) — Standard Format
 
@@ -204,44 +220,72 @@ Then a clean financial table: dark navy blue (#1E3A5F) header row, white text 'P
 Rows: [list all rows]. No red arrow — clean table only."
 ```
 
-**Python arrow script** (run after nano-banana generates base image):
+**Python arrow script** (run after nano-banana generates base image — auto-detects SDE row position):
 ```python
 import math
 from PIL import Image, ImageDraw
 
 img = Image.open("base.png")
-w, h = img.size  # typically ~1536x2752 at 2K
+w, h = img.size
+pixels = img.load()
 draw = ImageDraw.Draw(img)
 
-# Erase bottom area to remove any AI-generated arrow artifacts
-draw.rectangle([0, int(h*0.52), w, h], fill=(255,255,255))
+# --- Auto-detect navy header row ---
+navy_rows = []
+for y in range(0, h, 2):
+    count = sum(1 for x in range(0, w, 10)
+                if pixels[x,y][0]<60 and pixels[x,y][1]<90 and pixels[x,y][2]>80)
+    if count > (w/10)*0.3:
+        navy_rows.append(y)
 
-# Arrow tip: right column of SDE row — tune tip_x/tip_y by checking row positions
-tip_x = int(w * 0.937)   # ~right column
-tip_y = int(h * 0.534)   # ~SDE row center (last row)
+header_bottom = max(navy_rows)
 
-angle_rad = math.radians(38)  # ~38° diagonal
+# --- Auto-detect table bottom (last grey border line) ---
+grey_rows = []
+for y in range(header_bottom+5, h, 2):
+    count = sum(1 for x in range(0, w, 10)
+                if abs(int(pixels[x,y][0])-int(pixels[x,y][1]))<15
+                and abs(int(pixels[x,y][1])-int(pixels[x,y][2]))<15
+                and 160 < pixels[x,y][0] < 220)
+    if count > (w/10)*0.6:
+        grey_rows.append(y)
+
+table_bottom = max(grey_rows)
+row_h = (table_bottom - header_bottom) / 8
+sde_y = int(header_bottom + 7.5 * row_h)
+tip_x = int(w * 0.92)
+
+# Erase only below table bottom
+draw.rectangle([0, table_bottom + 5, w, h], fill=(255, 255, 255))
+
+print(f"Table bottom: {table_bottom}, SDE y: {sde_y}, Tip: ({tip_x},{sde_y})")
+
+# --- Draw arrow ---
+angle_rad = math.radians(38)
 dx, dy = math.cos(angle_rad), -math.sin(angle_rad)
-px, py = math.sin(angle_rad), math.cos(angle_rad)
+px, py = math.sin(angle_rad),  math.cos(angle_rad)
 
-head_len, shaft_len = int(w*0.195), int(w*0.391)  # shaft = 2x head
-body_half, head_half = int(w*0.047), int(w*0.090)
+head_len  = int(w * 0.195)
+shaft_len = int(w * 0.391)   # shaft = 2x head
+body_half = int(w * 0.047)
+head_half = int(w * 0.090)
 
-hx, hy = tip_x - head_len*dx, tip_y - head_len*dy
-tx, ty = tip_x - (head_len+shaft_len)*dx, tip_y - (head_len+shaft_len)*dy
+tip_y = sde_y
+hx = tip_x - head_len*dx;  hy = tip_y - head_len*dy
+tx = tip_x - (head_len+shaft_len)*dx;  ty = tip_y - (head_len+shaft_len)*dy
 
-def pt(cx, cy, pax, pay, off): return (cx+off*pax, cy+off*pay)
-
+def pt(cx,cy,pax,pay,off): return (cx+off*pax, cy+off*pay)
 polygon = [
-    pt(tx,ty,px,py,body_half), pt(hx,hy,px,py,body_half),
-    pt(hx,hy,px,py,head_half), (tip_x,tip_y),
+    pt(tx,ty,px,py, body_half), pt(hx,hy,px,py, body_half),
+    pt(hx,hy,px,py, head_half), (tip_x, tip_y),
     pt(hx,hy,px,py,-head_half), pt(hx,hy,px,py,-body_half),
     pt(tx,ty,px,py,-body_half),
 ]
 draw.polygon(polygon, fill=(232,25,44))
 img.save("output.png")
 ```
-**Note:** `tip_y` needs tuning per image — check where SDE row falls. SDE is the last (8th) body row. Erase rectangle threshold (~52% of height) may also need adjusting per generated image.
+**Venv:** `python3 -m venv /tmp/arrowenv && /tmp/arrowenv/bin/pip install pillow -q`
+**Run:** `/tmp/arrowenv/bin/python3 script.py`
 
 **Venv:** `python3 -m venv /tmp/arrowenv && /tmp/arrowenv/bin/pip install pillow -q`
 
