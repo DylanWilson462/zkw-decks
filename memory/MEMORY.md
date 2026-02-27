@@ -80,7 +80,37 @@ Building ZKW Group. Wants sharp, autonomous assistant. Connected via Telegram.
 - **nano-banana-pro:** Gemini API key in `openclaw.json` → `models.providers.google.apiKey`. Script: `/opt/homebrew/lib/node_modules/openclaw/skills/nano-banana-pro/scripts/generate_image.py`. Save creatives to `meta-ads/creatives/` with timestamp filenames.
 - **Ad formats for ZKW deal listings:** See dedicated sections below — X Post Ads (5), Note Ads (2), P&L Ad (1) = 8 total per deal.
 
-## Deal Ad Set — Master Trigger
+## "Create Marketing Assets" — Master Workflow Trigger
+
+**When Dylan sends a CIM + says "Create marketing assets" produce ALL of the following:**
+
+### Step 1: Slide Deck
+- Build HTML slideshow following all slide deck rules (14–16 slides, ZKW template, Anton/Montserrat fonts, etc.)
+- Push to GitHub Pages repo
+
+### Step 2: Image Ads (8 total)
+- 5 × X Post Ads (dark theme, Dylan's headshot, first-person voice, Apple emoji)
+- 2 × Note Ads (iPhone Notes style, stat-first + feature-first)
+- 1 × P&L Ad (Instagram Story 9:16, yellow banner + table + red arrow)
+
+### Step 3: Ad Copy
+- **Primary text** — first-person hook + 3 stat lines + operator-removed line + CTA ("Tap to learn more to get deal details.")
+- **3 headlines** — follow format: (1) "Monthly Recurring [profit] [descriptor] For Sale", (2) "[key feature] [descriptor] For Sale", (3) "[$/mo profit]. [key trait] Agency For Sale"
+- **Description** — always: "Priced to sell fast"
+
+### Step 4: Send for Approval
+- Send all assets (slide deck link + 8 images + ad copy) to Dylan for review
+- Wait for approval or revision requests
+
+### Step 5: On Approval — Deliver to Drive
+1. Create Google Doc with all ad copy (primary text, 3 headlines, description)
+2. Upload all 8 image ads + Google Doc to a new Google Drive folder named "[Deal Name] Ads"
+3. Share folder with dylan@zastrekentwilson.com
+4. Send Dylan the Drive folder link
+
+---
+
+## Deal Ad Set — Image Ads Only Trigger
 
 **When Dylan sends a CIM + says "make ads" (or "we're selling X, make ads"), produce ALL 8 images:**
 1. 5 × X Post Ads (dark theme Twitter style)
@@ -110,11 +140,14 @@ Individual ad types can also be triggered by name: "X ads", "Twitter ads", "note
 3. **Minimal** — hook, 2–3 punchy standalone lines, CTA
 
 **Copy rules:**
-- Hook = big number or surprising fact up top
+- **VOICE: Always first-person** — written as Dylan posting about HIS deal. Start with "I'm selling..." or "We're selling..." — never third-person announcement style
+- Hook = big number or surprising fact up top, in first-person framing
 - NO asking price / valuation multiple in any ad
 - Always end with: "Tap to learn more to get deal details."
 - Timestamp: `10:18 AM · Feb 9, 2026 · **600K** Views`
 - Engagement: `1.5K` comments · `1.9K` retweets · `2K` likes · `2K` bookmarks
+- **Checkbox format:** Use ✅ Apple emoji (renders natively via WebKit on macOS) — NOT custom SVG circles
+- **Global rule:** Always use Apple emoji across all ad formats (X Post, Note, P&L) — they render natively on macOS WebKit, no custom SVG or icon fonts needed
 
 **Technical pipeline:**
 1. Write 5 HTML files using template in `/Users/george/.openclaw/workspace/maple_ads/` (or recreate from scratch)
