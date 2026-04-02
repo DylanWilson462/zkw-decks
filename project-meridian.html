@@ -234,7 +234,7 @@ tr.bold td { font-weight: 700; }
   opacity: 0.8;
 }
 
-/* Iframe-friendly responsive adjustments */
+/* Iframe-friendly responsive adjustments — height */
 @media (max-height: 600px) {
   .slide { padding: 30px 50px; }
   .slide-top { padding-top: 25px; }
@@ -251,6 +251,63 @@ tr.bold td { font-weight: 700; }
   .cta-text { font-size: 36px; }
   .cta-details { font-size: 16px; }
   .toc-list li { font-size: 18px; margin-bottom: 10px; }
+}
+
+/* Mobile responsive — width-based */
+@media (max-width: 768px) {
+  .slide {
+    padding: 24px 20px 40px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide-top { padding-top: 20px; }
+  .slide h2 { font-size: 22px; margin-bottom: 14px; }
+  .slide p, .slide li { font-size: 14px; line-height: 1.5; max-width: 100%; }
+  .hero-headline { font-size: 22px; letter-spacing: 1px; max-width: 100%; }
+  .hero-sub { font-size: 13px; }
+  .hero-cta { font-size: 12px; }
+  .highlight-section { margin-bottom: 16px; }
+  .highlight-section .hl-label { font-size: 15px; }
+  .highlight-section .hl-body { font-size: 13px; line-height: 1.5; }
+  .content-block p { font-size: 13px; line-height: 1.5; margin-bottom: 10px; }
+  .toc-list li { font-size: 15px; margin-bottom: 8px; }
+  .takeaway-text { font-size: 16px; }
+  .cta-text { font-size: 28px; }
+  .cta-details { font-size: 14px; }
+  table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  th { padding: 6px 8px; font-size: 11px; white-space: nowrap; }
+  td { padding: 5px 8px; white-space: nowrap; }
+  .slide-num { bottom: 10px; right: 14px; font-size: 12px; }
+  .slide::after { bottom: 10px; left: 14px; width: 80px; height: 28px; }
+  .nav-btn { width: 36px; height: 36px; font-size: 22px; }
+  .nav-prev { left: 6px; }
+  .nav-next { right: 6px; }
+  .progress-dot { width: 6px; height: 6px; }
+  .progress-bar { bottom: 6px; gap: 4px; }
+}
+
+@media (max-width: 480px) {
+  .slide { padding: 16px 14px 36px 14px; }
+  .slide-top { padding-top: 14px; }
+  .slide h2 { font-size: 18px; margin-bottom: 10px; }
+  .hero-headline { font-size: 18px; }
+  .slide p, .slide li { font-size: 13px; }
+  .highlight-section .hl-label { font-size: 14px; }
+  .highlight-section .hl-body { font-size: 12px; }
+  .content-block p { font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
+  table { font-size: 11px; }
+  th { padding: 4px 6px; font-size: 10px; }
+  td { padding: 4px 6px; }
+  .takeaway-text { font-size: 14px; }
+  .cta-text { font-size: 24px; }
+  .cta-details { font-size: 12px; }
+  .nav-btn { width: 30px; height: 30px; font-size: 18px; }
 }
 
 </style>
