@@ -256,58 +256,85 @@ tr.bold td { font-weight: 700; }
 /* Mobile responsive — width-based */
 @media (max-width: 768px) {
   .slide {
-    padding: 24px 20px 40px 20px;
+    padding: 16px 16px 32px 16px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-  .slide-top { padding-top: 20px; }
-  .slide h2 { font-size: 22px; margin-bottom: 14px; }
-  .slide p, .slide li { font-size: 14px; line-height: 1.5; max-width: 100%; }
-  .hero-headline { font-size: 22px; letter-spacing: 1px; max-width: 100%; }
-  .hero-sub { font-size: 13px; }
-  .hero-cta { font-size: 12px; }
-  .highlight-section { margin-bottom: 16px; }
-  .highlight-section .hl-label { font-size: 15px; }
-  .highlight-section .hl-body { font-size: 13px; line-height: 1.5; }
-  .content-block p { font-size: 13px; line-height: 1.5; margin-bottom: 10px; }
-  .toc-list li { font-size: 15px; margin-bottom: 8px; }
-  .takeaway-text { font-size: 16px; }
-  .cta-text { font-size: 28px; }
-  .cta-details { font-size: 14px; }
+  .slide-top { padding-top: 14px; }
+  .slide h2 { font-size: 20px; margin-bottom: 12px; }
+  .slide p, .slide li { font-size: 13px; line-height: 1.45; max-width: 100%; }
+  .hero-headline { font-size: 20px; letter-spacing: 1px; max-width: 100%; }
+  .hero-sub { font-size: 12px; margin-top: 12px; }
+  .hero-cta { font-size: 11px; margin-top: 16px; }
+  .highlight-section { margin-bottom: 12px; }
+  .highlight-section .hl-label { font-size: 14px; margin-bottom: 4px; }
+  .highlight-section .hl-body { font-size: 12px; line-height: 1.4; }
+  .content-block p { font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
+  .toc-list li { font-size: 14px; margin-bottom: 6px; }
+  .takeaway-text { font-size: 15px; line-height: 1.4; }
+  .cta-text { font-size: 26px; }
+  .cta-details { font-size: 13px; margin-top: 14px; }
   table {
-    font-size: 12px;
+    font-size: 11px;
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     max-width: 100%;
   }
-  th { padding: 6px 8px; font-size: 11px; white-space: nowrap; }
-  td { padding: 5px 8px; white-space: nowrap; }
-  .slide-num { bottom: 10px; right: 14px; font-size: 12px; }
-  .slide::after { bottom: 10px; left: 14px; width: 80px; height: 28px; }
-  .nav-btn { width: 36px; height: 36px; font-size: 22px; }
-  .nav-prev { left: 6px; }
-  .nav-next { right: 6px; }
-  .progress-dot { width: 6px; height: 6px; }
-  .progress-bar { bottom: 6px; gap: 4px; }
+  th { padding: 5px 8px; font-size: 10px; white-space: nowrap; }
+  td { padding: 4px 8px; white-space: nowrap; }
+  .slide-num { bottom: 6px; right: 10px; font-size: 10px; }
+  .slide::after { bottom: 6px; left: 10px; width: 60px; height: 20px; }
+  .nav-btn { width: 32px; height: 32px; font-size: 20px; opacity: 0.5; }
+  .nav-prev { left: 4px; }
+  .nav-next { right: 4px; }
+  .progress-dot { width: 5px; height: 5px; }
+  .progress-bar { bottom: 4px; gap: 3px; }
 }
 
 @media (max-width: 480px) {
-  .slide { padding: 16px 14px 36px 14px; }
-  .slide-top { padding-top: 14px; }
-  .slide h2 { font-size: 18px; margin-bottom: 10px; }
-  .hero-headline { font-size: 18px; }
-  .slide p, .slide li { font-size: 13px; }
-  .highlight-section .hl-label { font-size: 14px; }
-  .highlight-section .hl-body { font-size: 12px; }
-  .content-block p { font-size: 12px; line-height: 1.4; margin-bottom: 8px; }
-  table { font-size: 11px; }
-  th { padding: 4px 6px; font-size: 10px; }
-  td { padding: 4px 6px; }
-  .takeaway-text { font-size: 14px; }
-  .cta-text { font-size: 24px; }
-  .cta-details { font-size: 12px; }
-  .nav-btn { width: 30px; height: 30px; font-size: 18px; }
+  .slide { padding: 12px 12px 28px 12px; }
+  .slide-top { padding-top: 10px; }
+  .slide h2 { font-size: 17px; margin-bottom: 8px; }
+  .hero-headline { font-size: 17px; letter-spacing: 0.5px; }
+  .slide p, .slide li { font-size: 11px; line-height: 1.4; }
+  .highlight-section .hl-label { font-size: 13px; }
+  .highlight-section .hl-body { font-size: 11px; line-height: 1.35; }
+  .content-block p { font-size: 11px; line-height: 1.35; margin-bottom: 6px; }
+  .toc-list li { font-size: 13px; }
+  table { font-size: 10px; }
+  th { padding: 3px 5px; font-size: 9px; }
+  td { padding: 3px 5px; }
+  .takeaway-text { font-size: 13px; }
+  .cta-text { font-size: 22px; }
+  .cta-details { font-size: 11px; }
+  .nav-btn { width: 28px; height: 28px; font-size: 16px; }
+}
+
+/* Iframe on mobile — both narrow and short */
+@media (max-width: 768px) and (max-height: 640px) {
+  .slide {
+    padding: 10px 12px 24px 12px;
+    justify-content: flex-start;
+  }
+  .slide h2 { font-size: 16px; margin-bottom: 6px; }
+  .slide p, .slide li { font-size: 10px; line-height: 1.35; }
+  .hero-headline { font-size: 15px; }
+  .hero-sub { font-size: 10px; margin-top: 8px; }
+  .hero-cta { font-size: 9px; margin-top: 10px; }
+  .highlight-section { margin-bottom: 8px; }
+  .highlight-section .hl-label { font-size: 12px; margin-bottom: 2px; }
+  .highlight-section .hl-body { font-size: 10px; line-height: 1.3; }
+  .content-block p { font-size: 10px; line-height: 1.3; margin-bottom: 5px; }
+  .toc-list li { font-size: 12px; margin-bottom: 4px; }
+  table { font-size: 9px; margin: 6px auto; }
+  th { padding: 3px 4px; font-size: 8px; }
+  td { padding: 2px 4px; }
+  .takeaway-text { font-size: 12px; }
+  .cta-text { font-size: 20px; }
+  .cta-details { font-size: 10px; margin-top: 8px; }
+  .slide::after { display: none; }
+  .slide-num { display: none; }
 }
 
 </style>
