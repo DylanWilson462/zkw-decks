@@ -20,6 +20,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  cursor: pointer;
 }
 .slide {
   width: 100%;
@@ -484,6 +485,19 @@ tr.bold td { font-weight: 700; }
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
   });
+  // Click anywhere: left half = back, right half = forward
+  document.querySelector('.deck-container').addEventListener('click', function(e) {
+    // Ignore clicks on nav buttons, progress dots, or links
+    if (e.target.closest('.nav-btn') || e.target.closest('.progress-bar') || e.target.closest('a')) return;
+    var x = e.clientX;
+    var w = window.innerWidth;
+    if (x < w / 2) {
+      navigate(-1);
+    } else {
+      navigate(1);
+    }
+  });
+
   var touchStartX = 0;
   document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
   document.addEventListener('touchend', function(e) {
